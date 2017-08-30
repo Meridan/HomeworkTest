@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.io.File;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /**
  * Created by user on 30.08.2017.
@@ -42,6 +43,7 @@ public class HomeworkTest {
         // Вводим данные
         String newFirstName = RandomStringUtils.randomAlphabetic(6);
         String newLastName = RandomStringUtils.randomAlphabetic(10);
+        String newFullName = newFirstName + ' ' + newLastName;
         String newAddress = RandomStringUtils.randomAlphabetic(14);
         String newCity = RandomStringUtils.randomAlphabetic(6);
         String newTelephone = RandomStringUtils.randomNumeric(10);
@@ -59,6 +61,16 @@ public class HomeworkTest {
 
         // клик по Add Owner
         driver.findElement(By.xpath("//button[text()='Add Owner']")).click();
+        // клик по меню Find Owners
+        driver.findElement(By.xpath("//span[text()='Find owners']")).click();
+        // клик по Find Owner
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+        int i = driver.findElements(By.xpath("//tr")).size()-1;
+        System.out.println(i);
+        WebElement name = driver.findElement(By.xpath("//tr[i]/td[1]/a/text()"));
+        System.out.println(name.getAttribute("innerHTML"));
+        assertThat(driver.findElement(By.xpath("//tr[i]/td[1]/a/text()")).getText()).isEqualTo(newFullName);
 
     }
 }
