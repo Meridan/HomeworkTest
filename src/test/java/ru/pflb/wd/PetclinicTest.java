@@ -161,6 +161,32 @@ public class PetclinicTest {
      * </ul>
      */
     public void shouldValidateAddedUser() {
-        // TODO
+        System.setProperty("webdriver.chrome.driver", new File("src/main/resources/chromedriver.exe").getAbsolutePath());
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(10, SECONDS);
+        // открываем PetClinic по ссылке
+        driver.get("http://localhost:8080/");
+        // клик по меню Find Owners
+        driver.findElement(By.xpath("//span[text()='Find owners']")).click();
+        // клик по Add Owners
+        driver.findElement(By.xpath("//a[text()='Add Owner']")).click();
+        // Вводим данные
+        String newFirstName = RandomStringUtils.randomAlphabetic(6);
+        String newLastName = RandomStringUtils.randomAlphabetic(10);
+        String newAddress = RandomStringUtils.randomAlphabetic(14);
+        String newCity = RandomStringUtils.randomAlphabetic(6);
+        String newTelephone = RandomStringUtils.randomNumeric(11);
+
+        WebElement firstNameEditBox = driver.findElement(By.xpath("//input[@id='firstName']"));
+        firstNameEditBox.sendKeys("" + newFirstName);
+        WebElement lastNameEditBox = driver.findElement(By.xpath("//input[@id='lastName']"));
+        lastNameEditBox.sendKeys("" + newLastName);
+        WebElement addressEditBox = driver.findElement(By.xpath("//input[@id='address']"));
+        addressEditBox.sendKeys("" + newAddress);
+        WebElement cityEditBox = driver.findElement(By.xpath("//input[@id='city']"));
+        cityEditBox.sendKeys("" + newCity);
+        WebElement telephoneEditBox = driver.findElement(By.xpath("//input[@id='telephone']"));
+        telephoneEditBox.sendKeys("" + newTelephone);
     }
 }
