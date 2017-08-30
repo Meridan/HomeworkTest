@@ -9,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.File;
 
+
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -34,20 +35,25 @@ public class HomeworkTest {
         WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, SECONDS);
+
         // открываем PetClinic по ссылке
         driver.get("http://localhost:8080/");
+
         // клик по меню Find Owners
         driver.findElement(By.xpath("//span[text()='Find owners']")).click();
+
         // клик по Add Owners
         driver.findElement(By.xpath("//a[text()='Add Owner']")).click();
-        // Вводим данные
+
+        // Генерируем рандомные данные (буквенные имя, фамилию, адрес, город и цифровой телефон)
         String newFirstName = RandomStringUtils.randomAlphabetic(6);
         String newLastName = RandomStringUtils.randomAlphabetic(10);
-        String newFullName = newFirstName + ' ' + newLastName;
+        String newFullName = newFirstName + ' ' + newLastName; // Склеиваем имя с фамилией для последующей проверки
         String newAddress = RandomStringUtils.randomAlphabetic(14);
         String newCity = RandomStringUtils.randomAlphabetic(6);
         String newTelephone = RandomStringUtils.randomNumeric(10);
 
+        // Заполняем соответствующие строки данными
         WebElement firstNameEditBox = driver.findElement(By.xpath("//input[@id='firstName']"));
         firstNameEditBox.sendKeys("" + newFirstName);
         WebElement lastNameEditBox = driver.findElement(By.xpath("//input[@id='lastName']"));
@@ -61,16 +67,19 @@ public class HomeworkTest {
 
         // клик по Add Owner
         driver.findElement(By.xpath("//button[text()='Add Owner']")).click();
+
         // клик по меню Find Owners
         driver.findElement(By.xpath("//span[text()='Find owners']")).click();
-        // клик по Find Owner
+
+        // клик по Find Owner, выводим список пользователей
         driver.findElement(By.xpath("//button[@type='submit']")).click();
 
-        int i = driver.findElements(By.xpath("//tr")).size()-1;
-        System.out.println(i);
-        WebElement name = driver.findElement(By.xpath("//tr[i]/td[1]/a/text()"));
-        System.out.println(name.getAttribute("innerHTML"));
-        assertThat(driver.findElement(By.xpath("//tr[i]/td[1]/a/text()")).getText()).isEqualTo(newFullName);
+        // проверка выставленных значений
+        assertThat(driver.findElement(By.xpath("//tr[last()]/td[1]/a")).getText()).isEqualTo(newFullName);
+        assertThat(driver.findElement(By.xpath("//tr[last()]/td[2]")).getText()).isEqualTo(newAddress);
+        assertThat(driver.findElement(By.xpath("//tr[last()]/td[3]")).getText()).isEqualTo(newCity);
+        assertThat(driver.findElement(By.xpath("//tr[last()]/td[4]")).getText()).isEqualTo(newTelephone);
 
     }
+
 }
